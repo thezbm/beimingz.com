@@ -1,0 +1,84 @@
+---
+import "../styles/global.css";
+import FileTree from "../components/FileTree.astro";
+import { fileTree, isIndexRoute } from "../lib/tree";
+import { ClientRouter } from "astro:transitions";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  path: string;
+}
+
+const { title, description, path } = Astro.props;
+
+const siteTitle = "Beiming Zhang";
+const pageTitle = title ? `${title} — ${siteTitle}` : siteTitle;
+const metaDescription = description ?? "Personal website of Beiming Zhang.";
+
+// Build the breadcrumb string. Regular paths use `/` separators (e.g.
+// ~/hobbies/climbing). When the first segment is an index page with a nested
+// child, the child is shown after a ` › ` separator (e.g. ~/writings › building-this-site).
+let breadcrumb: string;
+if (path === "/") {
+  breadcrumb = "~/file1";
+} else {
+  const segments = path.split("/").filter(Boolean);
+  const firstIsIndex = isIndexRoute(fileTree, `/${segments[0]}`);
+  if (firstIsIndex && segments.length > 1) {
+    const [head, ...rest] = segments;
+    breadcrumb = `~/${head} › ${rest.join("/")}`;
+  } else {
+    breadcrumb = `~/${segments.join("/")}`;
+  }
+}
+---
+
+<html lang="en" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={metaDescription} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:url" content={new URL(path, Astro.site)} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:url" content={new URL(path, Astro.site)} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/favicon-192x192.png"
+    />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <ClientRouter />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" transition:persist>
+        <div class="sidebar-header">
+          <strong>Beiming Zhang</strong>
+        </div>
+        <nav class="file-tree">
+          <FileTree nodes={fileTree} currentRoute={path} />
+        </nav>
+      </aside>
+      <main class="main">
+        <div class="main-header">{breadcrumb}</div>
+        <article class="main-content">
+          <slot />
+        </article>
+      </main>
+    </div>
+  </body>
+</html>

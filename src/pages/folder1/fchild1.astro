@@ -1,0 +1,17 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getEntry, render } from "astro:content";
+
+const entry = await getEntry("page", "fchild1");
+if (!entry) throw new Error("Missing 'fchild1' content entry");
+const { Content } = await render(entry);
+const route = "/folder1/fchild1";
+---
+
+<Layout
+  title={entry.data.title}
+  path={route}
+  description={entry.data.description}
+>
+  <Content />
+</Layout>

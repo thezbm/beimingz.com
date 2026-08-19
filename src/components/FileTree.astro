@@ -1,0 +1,86 @@
+---
+import type { TreeNode } from "../lib/tree";
+import { isNodeActive, isRouteActive } from "../lib/tree";
+import { Folder, FileText, Files as FileStack } from "@lucide/astro";
+
+export interface Props {
+  nodes: TreeNode[];
+  currentRoute: string;
+  depth?: number;
+}
+
+const { nodes, currentRoute, depth = 0 } = Astro.props;
+---
+
+{
+  nodes.map((node) => {
+    const active = isNodeActive(node, currentRoute);
+    const hasChildren = node.children && node.children.length > 0;
+    const open = isRouteActive(node, currentRoute);
+    const IconComponent =
+      node.type === "folder"
+        ? Folder
+        : node.type === "index"
+          ? FileStack
+          : FileText;
+
+    return hasChildren ? (
+      <details class="tree-node" data-route={node.route} {open}>
+        <summary
+          class:list={["tree-node-row", { active }]}
+          style={`--depth: ${depth}`}
+          data-route={node.route}
+          data-type={node.type}
+          aria-current={active ? "page" : undefined}
+        >
+          <span class="tree-caret" />
+          <IconComponent size={14} class="tree-icon" />
+          <span>{node.name}</span>
+        </summary>
+        <div class="tree-children">
+          <Astro.self
+            nodes={node.children ?? []}
+            currentRoute={currentRoute}
+            depth={depth + 1}
+          />
+        </div>
+      </details>
+    ) : (
+      <div class="tree-node">
+        <a
+          href={node.route}
+          class:list={["tree-node-row", { active }]}
+          style={`--depth: ${depth}`}
+          data-type={node.type}
+          aria-current={active ? "page" : undefined}
+        >
+          <IconComponent size={14} class="tree-icon" />
+          <span>{node.name}</span>
+        </a>
+      </div>
+    );
+  })
+}
+
+<script>
+  function updateActiveLink() {
+    const path = window.location.pathname;
+    document.querySelectorAll(".tree-node-row").forEach((el) => {
+      let route: string | null = null;
+      if (el instanceof HTMLAnchorElement) {
+        route = new URL(el.getAttribute("href") ?? "/", window.location.href)
+          .pathname;
+      } else {
+        route = el.getAttribute("data-route");
+      }
+      const type = el.getAttribute("data-type");
+      // Only index nodes are highlighted when the current route is nested under
+      // them. Files and folders highlight only on an exact match.
+      const isActive =
+        !!route &&
+        (route === path || (type === "index" && path.startsWith(route + "/")));
+      el.classList.toggle("active", isActive);
+    });
+  }
+  document.addEventListener("astro:page-load", updateActiveLink);
+</script>

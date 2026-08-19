@@ -1,0 +1,40 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getEntry, render, getCollection } from "astro:content";
+import { formatDate } from "../lib/format";
+
+const entry = await getEntry("page", "indexfile");
+if (!entry) throw new Error("Missing 'indexfile' content entry");
+const { Content } = await render(entry);
+const route = "/indexfile";
+
+const posts = (await getCollection("writing")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<Layout
+  title={entry.data.title}
+  path={route}
+  description={entry.data.description}
+>
+  <Content />
+  <ul class="blog-list" role="list">
+    {
+      posts.map((post) => (
+        <li>
+          <a href={`/indexfile/${post.id}`}>{post.data.title}</a>
+          {post.data.description && (
+            <>
+              {" — "}
+              <span>{post.data.description}</span>
+            </>
+          )}
+          <time class="date" datetime={post.data.date.toISOString()}>
+            {formatDate(post.data.date)}
+          </time>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>

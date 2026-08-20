@@ -63,15 +63,24 @@ const { nodes, currentRoute, depth = 0 } = Astro.props;
 }
 
 <script>
+  // Normalize a path for comparison: collapse duplicate slashes and strip a
+  // trailing slash (except for the root "/"). This makes highlighting robust
+  // across environments where URLs may or may not include a trailing slash
+  // (e.g. localhost vs. production).
+  function normalize(p: string) {
+    return p.replace(/\/{2,}/g, "/").replace(/\/$/, "") || "/";
+  }
   function updateActiveLink() {
-    const path = window.location.pathname;
+    const path = normalize(window.location.pathname);
     document.querySelectorAll(".tree-node-row").forEach((el) => {
       let route: string | null = null;
       if (el instanceof HTMLAnchorElement) {
-        route = new URL(el.getAttribute("href") ?? "/", window.location.href)
-          .pathname;
+        route = normalize(
+          new URL(el.getAttribute("href") ?? "/", window.location.href)
+            .pathname,
+        );
       } else {
-        route = el.getAttribute("data-route");
+        route = normalize(el.getAttribute("data-route") ?? "");
       }
       const type = el.getAttribute("data-type");
       // Only index nodes are highlighted when the current route is nested under

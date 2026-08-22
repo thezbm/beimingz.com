@@ -9,34 +9,24 @@ export interface TreeNode {
 
 export const fileTree: TreeNode[] = [
   {
-    name: "file1",
+    name: "readme",
     type: "file",
     route: "/",
   },
   {
-    name: "file2",
-    type: "file",
-    route: "/file2",
-  },
-  {
-    name: "indexfile",
+    name: "writings",
     type: "index",
-    route: "/indexfile",
+    route: "/writings",
   },
   {
-    name: "folder1",
+    name: "hobbies",
     type: "folder",
-    route: "/folder1",
+    route: "/hobbies",
     children: [
       {
-        name: "fchild1",
+        name: "climbing",
         type: "file",
-        route: "/folder1/fchild1",
-      },
-      {
-        name: "fchild2",
-        type: "file",
-        route: "/folder1/fchild2",
+        route: "/hobbies/climbing",
       },
     ],
   },

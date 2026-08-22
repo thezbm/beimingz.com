@@ -21,7 +21,7 @@ const metaDescription = description ?? "Personal website of Beiming Zhang.";
 // child, the child is shown after a ` › ` separator (e.g. ~/writings › building-this-site).
 let breadcrumb: string;
 if (path === "/") {
-  breadcrumb = "~/file1";
+  breadcrumb = "~/readme";
 } else {
   const segments = path.split("/").filter(Boolean);
   const firstIsIndex = isIndexRoute(fileTree, `/${segments[0]}`);

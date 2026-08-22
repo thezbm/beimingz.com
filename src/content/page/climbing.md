@@ -1,0 +1,11 @@
+---
+title: Climbing
+description: Rocks, ropes, and chalk
+---
+
+# Climbing
+
+My amazing friend Chloe not only inspired me to build this site, but also introduced me to climbing.
+
+I currently only do bouldering, and I started in June 2026 (techniquely my first session was May 31), at [Austin Bouldering Project - Springdale](https://boulderingproject.com/location/springdale).
+I find it really fascinating because it requires problem solving and involves a lot of techniques. Working on a difficult problem and finally sending it is always very exciting. Plus it builds my upper body strength in a more engaging way, I think, while hitting the gym feels repetitive and a little boring. If I'm going to the gym again, it's probably because I want to work on my body strength so I can send harder routes.

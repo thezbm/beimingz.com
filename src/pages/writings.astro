@@ -3,10 +3,10 @@ import Layout from "../layouts/Layout.astro";
 import { getEntry, render, getCollection } from "astro:content";
 import { formatDate } from "../lib/format";
 
-const entry = await getEntry("page", "indexfile");
-if (!entry) throw new Error("Missing 'indexfile' content entry");
+const entry = await getEntry("page", "writings");
+if (!entry) throw new Error("Missing 'writings' content entry");
 const { Content } = await render(entry);
-const route = "/indexfile";
+const route = "/writings";
 
 const posts = (await getCollection("writing")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -23,7 +23,7 @@ const posts = (await getCollection("writing")).sort(
     {
       posts.map((post) => (
         <li>
-          <a href={`/indexfile/${post.id}`}>{post.data.title}</a>
+          <a href={`/writings/${post.id}`}>{post.data.title}</a>
           {post.data.description && (
             <>
               {" — "}

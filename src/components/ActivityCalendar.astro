@@ -1,0 +1,121 @@
+---
+import { formatDate } from "../lib/format";
+
+interface Props {
+  days: string[];
+  label?: string;
+}
+
+const { days, label = "active days" } = Astro.props;
+
+const MS_DAY = 86_400_000;
+
+function parseDay(dateStr: string): Date {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
+function toKey(date: Date): string {
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${date.getFullYear()}-${m}-${d}`;
+}
+
+interface Cell {
+  date: Date;
+  active: boolean;
+}
+
+const dateSet = new Set(days);
+
+const sortedKeys = [...dateSet].sort();
+const first = parseDay(sortedKeys[0]);
+const last = parseDay(sortedKeys[sortedKeys.length - 1]);
+
+const start = new Date(first);
+start.setDate(start.getDate() - start.getDay());
+
+const end = new Date(last);
+end.setDate(end.getDate() + (6 - end.getDay()));
+
+const numWeeks = Math.round(
+  ((end.valueOf() - start.valueOf()) / MS_DAY + 1) / 7,
+);
+
+const weeks: Cell[][] = [];
+for (let w = 0; w < numWeeks; w++) {
+  const week: Cell[] = [];
+  for (let d = 0; d < 7; d++) {
+    const date = new Date(start.valueOf() + (w * 7 + d) * MS_DAY);
+    week.push({ date, active: dateSet.has(toKey(date)) });
+  }
+  weeks.push(week);
+}
+
+const monthLabels: { index: number; label: string }[] = [];
+let lastMonth = -1;
+weeks.forEach((week, index) => {
+  const mid = week[4].date;
+  if (mid.getMonth() !== lastMonth) {
+    lastMonth = mid.getMonth();
+    monthLabels.push({
+      index,
+      label: mid.toLocaleString("en-US", { month: "short" }),
+    });
+  }
+});
+
+const totalDays = dateSet.size;
+---
+
+{
+  totalDays === 0 ? (
+    <p class="activity-calendar-empty">Nothing logged yet.</p>
+  ) : (
+    <div
+      class="activity-calendar"
+      role="figure"
+      aria-label={`${totalDays} ${label} between ${formatDate(start)} and ${formatDate(end)}`}
+    >
+      <div class="cal-inner">
+        <div class="cal-months" aria-hidden="true">
+          {weeks.map((_, i) => (
+            <span class="cal-month">
+              {monthLabels.find((m) => m.index === i)?.label ?? ""}
+            </span>
+          ))}
+        </div>
+        <div class="cal-body">
+          <div class="cal-weekdays" aria-hidden="true">
+            {["", "Mon", "", "Wed", "", "Fri", ""].map((day) => (
+              <span>{day}</span>
+            ))}
+          </div>
+          {weeks.map((week, wi) => (
+            <div
+              class:list={[
+                "cal-week",
+                wi === 0 && "cal-edge-start",
+                wi === numWeeks - 1 && "cal-edge-end",
+              ]}
+            >
+              {week.map((cell) => (
+                <span
+                  class="cal-day"
+                  data-level={cell.active ? 1 : 0}
+                  data-date={formatDate(cell.date)}
+                  aria-label={formatDate(cell.date)}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+        <div class="cal-footer">
+          <span>
+            {totalDays} {label} · {formatDate(start)} – {formatDate(end)}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}

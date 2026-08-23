@@ -4,15 +4,48 @@ description: Rocks, ropes, and chalk
 ---
 
 import ActivityCalendar from "../../components/ActivityCalendar.astro";
+import VideoRow from "../../components/VideoRow.astro";
 import { climbs } from "../../lib/climbs";
 
 # Climbing
 
+Here's my journey of eating chalk.
+
+## Austin
+
 My amazing friend Chloe not only inspired me to build this site, but also introduced me to climbing.
 
-I currently only do bouldering, and I started in June 2026 (techniquely my first session was May 31), at [Austin Bouldering Project - Springdale](https://boulderingproject.com/location/springdale).
+I started bouldering in June 2026, at [Austin Bouldering Project - Springdale](https://boulderingproject.com/location/springdale).
 I find it really fascinating because it requires problem solving and involves a lot of techniques. Working on a difficult problem and finally sending it is always very exciting. Plus it builds my upper body strength in a more engaging way, I think, while hitting the gym feels repetitive and a little boring. If I'm going to the gym again, it's probably because I want to work on my body strength so I can send harder routes.
 
 From May 31, 2026 to Aug 22, I climbed 31 days:
 
 <ActivityCalendar days={climbs} label="climbing days" />
+
+Here are some routes I sent at ABP:
+
+<VideoRow
+  videos={[
+    "/media/abp-orange.mp4",
+    "/media/abp-green.mp4",
+    "/media/abp-purple.mp4",
+  ]}
+/>
+
+At ABP, green problems are v1–v3, purple problems are v2–v4, and orange problems are v3–v5. I'm pretty happy with my progress as a beginner. One area I need to work on is footwork. I found myself adjusting my feet too much. Feet are supposed to be placed in a precise and controlled way. Also, I haven't been using my hips and my legs enough.
+
+On my last day in Austin, I took a Bouldering I class at ABP because I wanted to see what it was like. Honestly, my biggest takeaway was probably learning how to warm up properly before a climbing session. I can't remember the names of all the warm-ups, but here's a checklist of the body parts to warm up:
+
+- neck
+- shoulders (shrugging)
+- small and big arm circles
+- elbow circles
+- wrist circles
+- fingers (tendon glides and finger flicks)
+- wide stance toe touches
+- hips
+- knees
+- ankles
+- toes
+
+I’m also glad my hands have developed enough calluses that I probably don’t need to tape my palms anymore to prevent flappers.

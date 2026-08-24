@@ -1,3 +1,6 @@
 public/media/abp-orange.mp4 filter=lfs diff=lfs merge=lfs -text
 public/media/abp-purple.mp4 filter=lfs diff=lfs merge=lfs -text
 public/media/abp-green.mp4 filter=lfs diff=lfs merge=lfs -text
+public/media/abp-green.jpg filter=lfs diff=lfs merge=lfs -text
+public/media/abp-orange.jpg filter=lfs diff=lfs merge=lfs -text
+public/media/abp-purple.jpg filter=lfs diff=lfs merge=lfs -text

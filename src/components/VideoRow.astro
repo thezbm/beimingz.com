@@ -1,7 +1,11 @@
 ---
+export interface VideoItem {
+  src: string;
+  poster: string;
+}
+
 export interface Props {
-  /** Video paths, e.g. ["/media/abp-green.mp4"] */
-  videos: string[];
+  videos: VideoItem[];
 }
 
 const { videos } = Astro.props;
@@ -9,8 +13,8 @@ const { videos } = Astro.props;
 
 <div class="video-row" style={`--cols: ${videos.length}`}>
   {
-    videos.map((src) => (
-      <video controls preload="metadata">
+    videos.map(({ src, poster }) => (
+      <video controls preload="metadata" poster={poster}>
         <source src={src} type="video/mp4" />
       </video>
     ))

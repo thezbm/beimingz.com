@@ -11,7 +11,7 @@ export interface Props {
 const { videos } = Astro.props;
 ---
 
-<div class="video-row" style={`--cols: ${videos.length}`}>
+<div class="video-row">
   {
     videos.map(({ src, poster }) => (
       <video controls preload="metadata" poster={poster}>

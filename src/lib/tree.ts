@@ -19,6 +19,18 @@ export const fileTree: TreeNode[] = [
     route: "/writings",
   },
   {
+    name: "cs",
+    type: "folder",
+    route: "/cs",
+    children: [
+      {
+        name: "dsa",
+        type: "file",
+        route: "/cs/dsa",
+      },
+    ],
+  },
+  {
     name: "hobbies",
     type: "folder",
     route: "/hobbies",

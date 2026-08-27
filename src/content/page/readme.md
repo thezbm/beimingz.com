@@ -12,7 +12,7 @@ I spend most of my time writing code, so building a personal site that looks lik
 What I'm up to:
 
 - Writing code
-- Doing LeetCode, which I really don't like; solving all the LeetCode hard problems doesn't make one a good programmer
+- [Doing LeetCode](/cs/dsa), which I really don't like; solving all the LeetCode hard problems doesn't make one a good programmer
 - [Climbing rocks](/hobbies/climbing)
 
 Thanks for stopping by. My amazing friend [Chloe](https://www.qiaochloe.com) inspired me to build my website and write stuff on it. Go check her website out!

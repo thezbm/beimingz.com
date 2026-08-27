@@ -48,6 +48,8 @@
   --accent: #0969da;
   --accent-soft: #ddf4ff;
   --code-bg: #f0f3f6;
+  --scrollbar-thumb: #d0d7de;
+  --scrollbar-track: transparent;
   --radius: 8px;
   --font-mono: "Menlo", monospace;
   --font-sans: "Lato", sans-serif;
@@ -64,11 +66,32 @@
     --accent: #58a6ff;
     --accent-soft: #1f6feb;
     --code-bg: #21262d;
+    --scrollbar-thumb: #484f58;
+    --scrollbar-track: transparent;
   }
 }
 
 * {
   box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 5px;
+  border: 2px solid var(--bg);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-muted);
 }
 
 html,
@@ -303,6 +326,20 @@ details[open] > summary > .tree-caret::before {
 .main-content pre code {
   background: transparent;
   padding: 0;
+}
+
+.main-content .expressive-code {
+  margin: 1.5rem 0;
+}
+.main-content .expressive-code figure.frame,
+.main-content .expressive-code figure.has-title {
+  box-shadow: none;
+}
+.main-content .expressive-code {
+  --ec-tm-markBg: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.main-content .expressive-code .ec-line.mark {
+  --tmLineBgCol: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .main-content blockquote {

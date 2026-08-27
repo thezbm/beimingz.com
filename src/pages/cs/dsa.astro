@@ -1,0 +1,17 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getEntry, render } from "astro:content";
+
+const entry = await getEntry("page", "dsa");
+if (!entry) throw new Error("Missing 'dsa' content entry");
+const { Content } = await render(entry);
+const route = "/cs/dsa";
+---
+
+<Layout
+  title={entry.data.title}
+  path={route}
+  description={entry.data.description}
+>
+  <Content />
+</Layout>

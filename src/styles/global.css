@@ -267,7 +267,7 @@ details[open] > summary > .tree-caret::before {
 .main-header {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 2;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   padding: 12px 32px;
@@ -341,6 +341,11 @@ details[open] > summary > .tree-caret::before {
 }
 .main-content .expressive-code .ec-line.mark {
   --tmLineBgCol: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.main-content .expressive-code .copy button {
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .main-content blockquote {

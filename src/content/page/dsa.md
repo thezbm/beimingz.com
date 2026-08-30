@@ -38,7 +38,7 @@ To sum up, there are only three things (highlighted) to consider when using this
 
 ### Examples
 
-#### [LeetCode 704. Binary Search](https://leetcode.com/problems/binary-search/description/)
+#### [LeetCode: 704. Binary Search](https://leetcode.com/problems/binary-search/description/)
 
 ```python {12}
 class Solution:
@@ -57,7 +57,7 @@ class Solution:
 
 Notice that we have to check here in case `target` isn't present in `nums`.
 
-#### [LeetCode 162. Find Peak Element](https://leetcode.com/problems/find-peak-element/description/)
+#### [LeetCode: 162. Find Peak Element](https://leetcode.com/problems/find-peak-element/description/)
 
 This one is a bit tricky.
 
@@ -84,3 +84,42 @@ Surprisingly, the exact same algorithm also works for our problem where there ca
 We can assume every array has a peak: if there were no peaks, the second element has to be larger than the first, otherwise the first is the peak; the third has to be larger than the second for the same reason; thus, all elements have to be increasing (because of the constraint `nums[i] != nums[i + 1]` for all valid `i`); however, the last element will then be a peak. Thus, there always exists a peak in an given array. (Also, the problem description doesn't say anything about returning `-1`.)
 
 The reason this works even with multiple peaks is that `check` might map the array to something like `[False, False, True, True, False, True, False, True]`, and what matters is that each result tells us which half must contain a peak: if `check(mid)` is `True`, then `nums[mid] > nums[mid + 1]`, so a peak exists somewhere in `[left, mid]`; otherwise, `nums[mid] < nums[mid + 1]`, so a peak exists in `[mid + 1, right]`. Thus, we can always discard one half while preserving the guarantee that a peak remains.
+
+#### [LeetCode: 153. Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/)
+
+```python
+def findMin(self, nums: List[int]) -> int:
+    def check(index):
+        return nums[index] <= nums[-1]
+    left, right = 0, len(nums) - 1
+    while left < right:
+        mid = left + (right - left) // 2
+        if check(mid):
+            right = mid
+        else:
+            left = mid + 1
+    return nums[left]
+```
+
+After a rotation, the target (the minimum) splits the array into two halves: the first half strictly larger than the last element, and the second half, starting with the target, smaller than or equal to the last element (equality holds when the target is the last element).
+
+#### [LeetCode: 33. Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/description/)
+
+```python
+def search(self, nums: List[int], target: int) -> int:
+    def check(index):
+        if target > nums[-1]:
+            return nums[index] >= target or nums[index] <= nums[-1]
+        else:
+            return nums[index] >= target and nums[index] <= nums[-1]
+    left, right = 0, len(nums) - 1
+    while left < right:
+        mid = left + (right - left) // 2
+        if check(mid):
+            right = mid
+        else:
+            left = mid + 1
+    return left if nums[left] == target else -1
+```
+
+The `check` function for this problem basically uses the last element as a reference point to determine which sorted half `target` belongs to.

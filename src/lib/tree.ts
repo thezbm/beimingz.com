@@ -40,6 +40,11 @@ export const fileTree: TreeNode[] = [
         type: "file",
         route: "/hobbies/climbing",
       },
+      {
+        name: "tv",
+        type: "file",
+        route: "/hobbies/tv",
+      },
     ],
   },
 ];

@@ -1,0 +1,68 @@
+---
+import type { Show } from "../lib/shows";
+
+interface Props {
+  shows: Show[];
+}
+
+const { shows } = Astro.props;
+
+function slug(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+const sorted = [...shows].sort((a, b) => {
+  if (a.tier == null && b.tier == null) return a.title.localeCompare(b.title);
+  if (a.tier == null) return 1;
+  if (b.tier == null) return -1;
+  return b.tier - a.tier || a.title.localeCompare(b.title);
+});
+---
+
+<ul class="poster-grid" role="list">
+  {
+    sorted.map((show) => (
+      <li class="poster-card">
+        <div class="poster-thumb">
+          <img
+            src={`/media/tv-posters/${slug(show.title)}.jpg`}
+            alt={`${show.title} poster`}
+            loading="lazy"
+            width={330}
+            height={495}
+          />
+        </div>
+        <div class="poster-caption">
+          <span class="poster-title">{show.title}</span>
+          <span class="show-status-row">
+            <span class="show-status">{show.status}</span>
+            {show.tier != null && (
+              <span
+                class="tier-stars"
+                role="img"
+                aria-label={`rated ${show.tier} out of 5`}
+              >
+                {Array.from({ length: 5 }, (_, i) =>
+                  i < (show.tier as number) ? "★" : "☆",
+                ).join("")}
+              </span>
+            )}
+          </span>
+          {show.note != null ? (
+            <span class="note-wrap">
+              <span class="show-note">{show.note}</span>
+              <span class="poster-tip poster-tip-note" aria-hidden="true">
+                {show.note}
+              </span>
+            </span>
+          ) : (
+            <span class="show-note show-note-empty" aria-hidden="true" />
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ul>

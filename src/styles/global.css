@@ -376,6 +376,137 @@ details[open] > summary > .tree-caret::before {
   font-weight: 600;
 }
 
+.main-content .tier-stars {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  color: #eac54f;
+  white-space: nowrap;
+  line-height: inherit;
+}
+
+.show-status-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 1.3rem;
+}
+
+.show-status-row .show-status {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.main-content .show-status {
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+}
+
+.main-content .show-note {
+  color: var(--text);
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(2 * 1.35em);
+}
+
+.main-content .show-note-empty {
+  display: block;
+  min-height: calc(2 * 1.35em);
+}
+
+.poster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 18px;
+  margin: 2rem 0;
+  list-style: none;
+  padding: 0;
+}
+
+.poster-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.poster-thumb {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.poster-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.poster-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.poster-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(2 * 1.3em);
+}
+
+.note-wrap {
+  position: relative;
+  width: max-content;
+  max-width: 100%;
+}
+
+.poster-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  z-index: 20;
+  min-width: 220px;
+  max-width: 320px;
+  width: max-content;
+  padding: 6px 10px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.4;
+  border-radius: var(--radius);
+  white-space: normal;
+  overflow-wrap: break-word;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+}
+
+.note-wrap:has(.show-note:hover) .poster-tip-note,
+.note-wrap:has(.show-note:focus-visible) .poster-tip-note {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
 .folder-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));

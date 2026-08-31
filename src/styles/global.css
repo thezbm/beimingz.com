@@ -405,7 +405,7 @@ details[open] > summary > .tree-caret::before {
   font-size: 0.8rem;
 }
 
-.main-content .show-note {
+.main-content .show-review {
   color: var(--text);
   font-size: 0.85rem;
   font-style: italic;
@@ -417,7 +417,7 @@ details[open] > summary > .tree-caret::before {
   min-height: calc(2 * 1.35em);
 }
 
-.main-content .show-note-empty {
+.main-content .show-review-empty {
   display: block;
   min-height: calc(2 * 1.35em);
 }
@@ -469,7 +469,7 @@ details[open] > summary > .tree-caret::before {
   min-height: calc(2 * 1.3em);
 }
 
-.note-wrap {
+.review-wrap {
   position: relative;
   width: max-content;
   max-width: 100%;
@@ -501,8 +501,8 @@ details[open] > summary > .tree-caret::before {
     transform 120ms ease;
 }
 
-.note-wrap:has(.show-note:hover) .poster-tip-note,
-.note-wrap:has(.show-note:focus-visible) .poster-tip-note {
+.review-wrap:has(.show-review:hover) .poster-tip-review,
+.review-wrap:has(.show-review:focus-visible) .poster-tip-review {
   opacity: 1;
   transform: translate(-50%, 0);
 }

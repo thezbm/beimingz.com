@@ -51,15 +51,15 @@ const sorted = [...shows].sort((a, b) => {
               </span>
             )}
           </span>
-          {show.note != null ? (
-            <span class="note-wrap">
-              <span class="show-note">{show.note}</span>
-              <span class="poster-tip poster-tip-note" aria-hidden="true">
-                {show.note}
+          {show.review != null ? (
+            <span class="review-wrap">
+              <span class="show-review">{show.review}</span>
+              <span class="poster-tip poster-tip-review" aria-hidden="true">
+                {show.review}
               </span>
             </span>
           ) : (
-            <span class="show-note show-note-empty" aria-hidden="true" />
+            <span class="show-review show-review-empty" aria-hidden="true" />
           )}
         </div>
       </li>

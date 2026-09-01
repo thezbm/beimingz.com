@@ -260,14 +260,15 @@ details[open] > summary > .tree-caret::before {
 }
 
 .main {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: clip;
   background: var(--bg);
 }
 
 .main-header {
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 5;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   padding: 12px 32px;
@@ -329,7 +330,7 @@ details[open] > summary > .tree-caret::before {
   padding: 0;
 }
 
-.main-content .katex{
+.main-content .katex {
   font-size: 1em;
 }
 
@@ -479,14 +480,13 @@ details[open] > summary > .tree-caret::before {
   max-width: 100%;
 }
 
-.poster-tip {
+.review-tip {
   position: absolute;
-  left: 50%;
-  bottom: calc(100% + 4px);
-  z-index: 20;
-  min-width: 220px;
-  max-width: 320px;
+  top: 0;
+  left: 0;
   width: max-content;
+  max-width: min(300px, calc(100vw - 24px));
+  z-index: 10;
   padding: 6px 10px;
   background: var(--text);
   color: var(--bg);
@@ -496,19 +496,17 @@ details[open] > summary > .tree-caret::before {
   line-height: 1.4;
   border-radius: var(--radius);
   white-space: normal;
-  overflow-wrap: break-word;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, 4px);
+  transform: translateY(4px);
   transition:
     opacity 120ms ease,
     transform 120ms ease;
 }
 
-.review-wrap:has(.show-review:hover) .poster-tip-review,
-.review-wrap:has(.show-review:focus-visible) .poster-tip-review {
+.review-wrap .review-tip.is-visible {
   opacity: 1;
-  transform: translate(-50%, 0);
+  transform: translateY(0);
 }
 
 .folder-grid {
@@ -668,7 +666,7 @@ details[open] > summary > .tree-caret::before {
   color: var(--text);
   white-space: nowrap;
   pointer-events: none;
-  z-index: 2;
+  z-index: 5;
 }
 
 .cal-day[data-date]:hover::after {

@@ -54,7 +54,7 @@ const sorted = [...shows].sort((a, b) => {
           {show.review != null ? (
             <span class="review-wrap">
               <span class="show-review">{show.review}</span>
-              <span class="poster-tip poster-tip-review" aria-hidden="true">
+              <span class="review-tip" aria-hidden="true">
                 {show.review}
               </span>
             </span>
@@ -66,3 +66,44 @@ const sorted = [...shows].sort((a, b) => {
     ))
   }
 </ul>
+
+<script>
+  import {
+    computePosition,
+    autoUpdate,
+    offset,
+    flip,
+    shift,
+  } from "@floating-ui/dom";
+
+  const wraps = document.querySelectorAll(".review-wrap");
+  for (const wrap of wraps) {
+    const ref = wrap.querySelector<HTMLElement>(".show-review");
+    const tip = wrap.querySelector<HTMLElement>(".review-tip");
+    if (!ref || !tip) continue;
+
+    const refEl = ref;
+    const tipEl = tip;
+    let cleanup = () => {};
+    function update() {
+      computePosition(refEl, tipEl, {
+        placement: "top",
+        strategy: "absolute",
+        middleware: [offset(6), flip(), shift({ padding: 8 })],
+      }).then(({ x, y }) => {
+        tipEl.style.left = `${x}px`;
+        tipEl.style.top = `${y}px`;
+      });
+    }
+    function show() {
+      tipEl.classList.add("is-visible");
+      cleanup = autoUpdate(refEl, tipEl, update);
+    }
+    function hide() {
+      tipEl.classList.remove("is-visible");
+      cleanup();
+    }
+    refEl.addEventListener("pointerenter", show);
+    refEl.addEventListener("pointerleave", hide);
+  }
+</script>

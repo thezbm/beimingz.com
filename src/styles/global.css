@@ -329,6 +329,10 @@ details[open] > summary > .tree-caret::before {
   padding: 0;
 }
 
+.main-content .katex{
+  font-size: 1em;
+}
+
 .main-content .expressive-code {
   margin: 1.5rem 0;
 }

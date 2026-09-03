@@ -64,19 +64,20 @@ This one is a bit tricky.
 Let's consider the case where there's only one peak. It's easy to solve by binary search:
 
 ```python
-def findPeakElement(self, nums: List[int]) -> int:
-    def check(index):
-        if index == len(nums) - 1:
-            return True
-        return nums[index] > nums[index + 1]
-    left, right = 0, len(nums) - 1
-    while left < right:
-        mid = left + (right - left) // 2
-        if check(mid):
-            right = mid
-        else:
-            left = mid + 1
-    return left
+class Solution:
+    def findPeakElement(self, nums: List[int]) -> int:
+        def check(index):
+            if index == len(nums) - 1:
+                return True
+            return nums[index] > nums[index + 1]
+        left, right = 0, len(nums) - 1
+        while left < right:
+            mid = left + (right - left) // 2
+            if check(mid):
+                right = mid
+            else:
+                left = mid + 1
+        return left
 ```
 
 Surprisingly, the exact same algorithm also works for our problem where there can be multiple peaks.
@@ -88,17 +89,18 @@ The reason this works even with multiple peaks is that `check` might map the arr
 #### [LeetCode: 153. Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/)
 
 ```python
-def findMin(self, nums: List[int]) -> int:
-    def check(index):
-        return nums[index] <= nums[-1]
-    left, right = 0, len(nums) - 1
-    while left < right:
-        mid = left + (right - left) // 2
-        if check(mid):
-            right = mid
-        else:
-            left = mid + 1
-    return nums[left]
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        def check(index):
+            return nums[index] <= nums[-1]
+        left, right = 0, len(nums) - 1
+        while left < right:
+            mid = left + (right - left) // 2
+            if check(mid):
+                right = mid
+            else:
+                left = mid + 1
+        return nums[left]
 ```
 
 After a rotation, the target (the minimum) splits the array into two halves: the first half strictly larger than the last element, and the second half, starting with the target, smaller than or equal to the last element (equality holds when the target is the last element).
@@ -106,20 +108,122 @@ After a rotation, the target (the minimum) splits the array into two halves: the
 #### [LeetCode: 33. Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/description/)
 
 ```python
-def search(self, nums: List[int], target: int) -> int:
-    def check(index):
-        if target > nums[-1]:
-            return nums[index] >= target or nums[index] <= nums[-1]
-        else:
-            return nums[index] >= target and nums[index] <= nums[-1]
-    left, right = 0, len(nums) - 1
-    while left < right:
-        mid = left + (right - left) // 2
-        if check(mid):
-            right = mid
-        else:
-            left = mid + 1
-    return left if nums[left] == target else -1
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        def check(index):
+            if target > nums[-1]:
+                return nums[index] >= target or nums[index] <= nums[-1]
+            else:
+                return nums[index] >= target and nums[index] <= nums[-1]
+        left, right = 0, len(nums) - 1
+        while left < right:
+            mid = left + (right - left) // 2
+            if check(mid):
+                right = mid
+            else:
+                left = mid + 1
+        return left if nums[left] == target else -1
 ```
 
 The `check` function for this problem basically uses the last element as a reference point to determine which sorted half `target` belongs to.
+
+## Dynamic Programming
+
+Key attributes:
+
+- optimal substructure: the solution to a given optimization problem can be obtained by combining the optimal solutions to its sub-problems
+- overlapping sub-problems: the space of sub-problems must be small, that is, any recursive algorithm solving the problem should solve the same sub-problems over and over, rather than generating new sub-problems
+
+Approaches:
+
+- top-down: recursion + caching
+    - usually more intuitive
+    - only computes sub-problems that are actually needed
+- bottom-up: iteration + DP table
+    - no call stack overhead
+    - potential space optimization
+
+### Examples
+
+#### [LeetCode: 70. Climbing Stairs](https://leetcode.com/problems/climbing-stairs/description/)
+
+A classic DP problem. You can climb to stair `n` by either taking 1 step from stair `n-1` or taking 2 steps from stair `n-2`. This means the number of ways to climb to stair `n` equals the number of ways to climb to stair `n-1` plus the number of ways to climb to stair `n-2`. Notice how we are breaking the problem into two sub-problems, and how the solution to the problem can be obtained by combining the solutions to the sub-problems. Also, notice that the sub-problems are overlapping: to get the solution for `n-1`, we are going to need the solution for `n-2`, which we already computed for `n`.
+
+The most intuitive way to implement the algorithm above is through recursion.
+
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n == 1:
+            return 1
+        if n == 2:
+            return 2
+        return self.climbStairs(n - 1) + self.climbStairs(n - 2)
+```
+
+The implementation above is correct, but not efficient enough. This is because we are doing a ton of redundant computation: we are not reusing the computation results for the overlapping sub-problems. In fact, this implementation has $O(2^n)$ time complexity.
+The trivial optimization now is to use memoization (storing the results of expensive function calls in a cache to return them instantly when the same inputs occur again).
+
+```python {3-4}
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        from functools import cache
+        @cache
+        def helper(n):
+            if n == 1:
+                return 1
+            if n == 2:
+                return 2
+            return helper(n - 1) + helper(n - 2)
+
+        return helper(n)
+```
+
+In older versions of Python, import `lru_cache` and use `@lru_cache()` instead. The following implementation essentially does the same thing, without the `cache` decorator.
+
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        memo = {1: 1, 2: 2}
+        def helper(n):
+            if n not in memo:
+                memo[n] = helper(n - 1) + helper(n - 2)
+            return memo[n]
+
+        return helper(n)
+```
+
+The memoization optimization collapses the recursion tree from basically a full binary tree into a degenerate tree (a skewed tree), giving $O(n)$ time complexity.
+
+The above approach is top-down. Now, we show a bottom-up approach with the same time complexity, where we build the answer from the base cases all the way up to `n`, iteratively.
+
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n == 1:
+            return 1
+        if n == 2:
+            return 2
+        dp = [0] * (n + 1)
+        dp[1], dp[2] = 1, 2
+        for i in range(3, n + 1):
+            dp[i] = dp[i - 1] + dp[i - 2]
+        return dp[n]
+```
+
+Notice that to compute `dp[i]`, we only need `dp[i-1]` and `dp[i-2]`, which gives us the following space optimization.
+
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n == 1:
+            return 1
+        if n == 2:
+            return 2
+        a, b = 1, 2
+        for _ in range(3, n + 1):
+            a, b = b, a + b
+        return b
+```
+
+By replacing the `dp` array with two variables `a` and `b` that get updated every time we compute the next step, we have an $O(1)$ space complexity implementation.

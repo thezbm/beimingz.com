@@ -4,6 +4,7 @@ import "katex/dist/katex.min.css";
 import FileTree from "../components/FileTree.astro";
 import { fileTree, isIndexRoute } from "../lib/tree";
 import { ClientRouter } from "astro:transitions";
+import { Menu } from "@lucide/astro";
 
 export interface Props {
   title?: string;
@@ -66,11 +67,12 @@ if (path === "/") {
   </head>
   <body>
     <div class="app">
-      <aside class="sidebar" transition:persist>
+      <div class="sidebar-backdrop" aria-hidden="true"></div>
+      <aside class="sidebar" id="sidebar" tabindex="-1" transition:persist>
         <div class="sidebar-header">
           <strong>beimingz.com</strong>
         </div>
-        <nav class="file-tree">
+        <nav class="file-tree" id="sidebar-tree">
           <FileTree nodes={fileTree} currentRoute={path} />
         </nav>
         <div class="sidebar-footer">
@@ -87,7 +89,18 @@ if (path === "/") {
         </div>
       </aside>
       <main class="main">
-        <div class="main-header">{breadcrumb}</div>
+        <div class="main-header">
+          <button
+            class="menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="sidebar"
+          >
+            <Menu size={18} aria-hidden="true" />
+            <span class="sr-only">Toggle navigation</span>
+          </button>
+          {breadcrumb}
+        </div>
         <article class="main-content">
           <slot />
         </article>
@@ -95,3 +108,48 @@ if (path === "/") {
     </div>
   </body>
 </html>
+
+<script>
+  // On mobile the sidebar becomes an off-canvas drawer that slides in from the
+  // left, opened via the menu button in the sticky header. The bundled module
+  // script runs once; the body is swapped on navigation, so clicks are handled
+  // with event delegation on `document` (which persists) and the open/close
+  // state is reconciled on every `astro:page-load`.
+  const isMobile = () => window.matchMedia("(max-width: 720px)").matches;
+
+  function setOpen(open: boolean) {
+    document.body.classList.toggle("sidebar-open", open);
+    document
+      .querySelector(".menu-toggle")
+      ?.setAttribute("aria-expanded", String(open));
+    if (open)
+      (document.querySelector(".sidebar") as HTMLElement | null)?.focus();
+  }
+
+  document.addEventListener("click", (event) => {
+    if (!isMobile()) return;
+    const target = event.target as Element | null;
+    if (!target) return;
+    if (target.closest(".menu-toggle")) {
+      setOpen(!document.body.classList.contains("sidebar-open"));
+    } else if (target.closest(".sidebar-backdrop")) {
+      setOpen(false);
+    } else if (target.closest(".file-tree a")) {
+      setOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      document.body.classList.contains("sidebar-open")
+    ) {
+      setOpen(false);
+      (document.querySelector(".menu-toggle") as HTMLElement | null)?.focus();
+    }
+  });
+
+  document.addEventListener("astro:page-load", () => {
+    setOpen(false);
+  });
+</script>

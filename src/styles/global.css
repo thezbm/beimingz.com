@@ -262,6 +262,7 @@ details[open] > summary > .tree-caret::before {
 .main {
   overflow-y: auto;
   overflow-x: clip;
+  scrollbar-gutter: stable;
   background: var(--bg);
 }
 

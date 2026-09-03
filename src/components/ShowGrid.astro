@@ -77,6 +77,7 @@ const sorted = [...shows].sort((a, b) => {
   } from "@floating-ui/dom";
 
   const wraps = document.querySelectorAll(".review-wrap");
+  const activeTips = new Set<() => void>();
   for (const wrap of wraps) {
     const ref = wrap.querySelector<HTMLElement>(".show-review");
     const tip = wrap.querySelector<HTMLElement>(".review-tip");
@@ -85,6 +86,7 @@ const sorted = [...shows].sort((a, b) => {
     const refEl = ref;
     const tipEl = tip;
     let cleanup = () => {};
+    let visible = false;
     function update() {
       computePosition(refEl, tipEl, {
         placement: "top",
@@ -96,14 +98,34 @@ const sorted = [...shows].sort((a, b) => {
       });
     }
     function show() {
+      visible = true;
       tipEl.classList.add("is-visible");
+      activeTips.add(hide);
       cleanup = autoUpdate(refEl, tipEl, update);
     }
     function hide() {
+      visible = false;
       tipEl.classList.remove("is-visible");
+      activeTips.delete(hide);
       cleanup();
     }
-    refEl.addEventListener("pointerenter", show);
-    refEl.addEventListener("pointerleave", hide);
+    const isTouch = matchMedia("(hover: none), (pointer: coarse)").matches;
+    if (isTouch) {
+      refEl.addEventListener("click", () => (visible ? hide() : show()));
+      document.addEventListener("click", (e) => {
+        if (visible && !wrap.contains(e.target as Node)) hide();
+      });
+    } else {
+      refEl.addEventListener("pointerenter", show);
+      refEl.addEventListener("pointerleave", hide);
+    }
   }
+
+  document.addEventListener(
+    "scroll",
+    () => {
+      for (const hide of activeTips) hide();
+    },
+    { capture: true, passive: true },
+  );
 </script>

@@ -45,6 +45,7 @@ class Solution:
     def search(self, nums: List[int], target: int) -> int:
         def check(index):
             return nums[index] >= target
+
         left, right = 0, len(nums) - 1
         while left < right:
             mid = left + (right - left) // 2
@@ -70,6 +71,7 @@ class Solution:
             if index == len(nums) - 1:
                 return True
             return nums[index] > nums[index + 1]
+
         left, right = 0, len(nums) - 1
         while left < right:
             mid = left + (right - left) // 2
@@ -93,6 +95,7 @@ class Solution:
     def findMin(self, nums: List[int]) -> int:
         def check(index):
             return nums[index] <= nums[-1]
+
         left, right = 0, len(nums) - 1
         while left < right:
             mid = left + (right - left) // 2
@@ -115,6 +118,7 @@ class Solution:
                 return nums[index] >= target or nums[index] <= nums[-1]
             else:
                 return nums[index] >= target and nums[index] <= nums[-1]
+
         left, right = 0, len(nums) - 1
         while left < right:
             mid = left + (right - left) // 2
@@ -164,10 +168,11 @@ class Solution:
 The implementation above is correct, but not efficient enough. This is because we are doing a ton of redundant computation: we are not reusing the computation results for the overlapping sub-problems. In fact, this implementation has $O(2^n)$ time complexity.
 The trivial optimization now is to use memoization (storing the results of expensive function calls in a cache to return them instantly when the same inputs occur again).
 
-```python {3-4}
+```python {3, 5}
 class Solution:
     def climbStairs(self, n: int) -> int:
         from functools import cache
+
         @cache
         def helper(n):
             if n == 1:
@@ -185,6 +190,7 @@ In older versions of Python, import `lru_cache` and use `@lru_cache()` instead. 
 class Solution:
     def climbStairs(self, n: int) -> int:
         memo = {1: 1, 2: 2}
+
         def helper(n):
             if n not in memo:
                 memo[n] = helper(n - 1) + helper(n - 2)
@@ -227,3 +233,21 @@ class Solution:
 ```
 
 By replacing the `dp` array with two variables `a` and `b` that get updated every time we compute the next step, we have an $O(1)$ space complexity implementation.
+
+#### [LeetCode: 198. House Robber](https://leetcode.com/problems/house-robber/description/)
+
+To find the maximum money we can get from the first `i` houses, we only need two values: the best we can do robbing house `i`, and the best we can do not robbing it, then take the larger of the two.
+
+If we rob house `i`, we can't rob house `i-1`, so the best is `nums[i]` plus the best for the first `i-1` houses without robbing house `i-1`. If we don't rob house `i`, there's no such restriction, so the best is the larger of the two options for the first `i-1` houses (robbing or not robbing house `i-1`).
+
+Either way, the two values for the first `i` houses depend only on the two values for the first `i-1` houses, so we can compute them bottom-up while keeping just two numbers in memory. The space-optimized implementation below tracks them as `rob` and `norob`.
+
+```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        rob, norob = 0, 0
+        for num in nums:
+            rob, norob = num + norob, max(norob, rob)
+        return max(rob, norob)
+```
+

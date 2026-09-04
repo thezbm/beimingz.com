@@ -28,6 +28,11 @@ export const fileTree: TreeNode[] = [
         type: "file",
         route: "/cs/dsa",
       },
+      {
+        name: "networks",
+        type: "file",
+        route: "/cs/networks",
+      },
     ],
   },
   {

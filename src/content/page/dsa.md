@@ -141,11 +141,11 @@ Key attributes:
 Approaches:
 
 - top-down: recursion + caching
-    - usually more intuitive
-    - only computes sub-problems that are actually needed
+  - usually more intuitive
+  - only computes sub-problems that are actually needed
 - bottom-up: iteration + DP table
-    - no call stack overhead
-    - potential space optimization
+  - no call stack overhead
+  - potential space optimization
 
 ### Examples
 
@@ -250,4 +250,3 @@ class Solution:
             rob, norob = num + norob, max(norob, rob)
         return max(rob, norob)
 ```
-

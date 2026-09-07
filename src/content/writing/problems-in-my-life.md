@@ -1,7 +1,8 @@
 ---
 title: Problems in My Life
-date: 2026-09-06
 description: "Perfectionism, procrastination, and poor task management: how I deal with them."
+createdAt: 2026-09-06
+updatedAt: 2026-09-07
 ---
 
 # Problems in My Life

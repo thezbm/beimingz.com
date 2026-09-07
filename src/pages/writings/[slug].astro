@@ -21,8 +21,8 @@ const route = `/writings/${post.id}`;
   path={route}
   description={post.data.description}
 >
-  <time class="date" datetime={post.data.date.toISOString()}>
-    {formatDate(post.data.date, "long")}
+  <time class="date" datetime={post.data.createdAt.toISOString()}>
+    {formatDate(post.data.createdAt, "long")}
   </time>
   <Content />
 </Layout>

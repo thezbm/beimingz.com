@@ -9,7 +9,7 @@ const { Content } = await render(entry);
 const route = "/writings";
 
 const posts = (await getCollection("writing")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  (a, b) => b.data.createdAt.valueOf() - a.data.createdAt.valueOf(),
 );
 ---
 
@@ -30,8 +30,8 @@ const posts = (await getCollection("writing")).sort(
               <span>{post.data.description}</span>
             </>
           )}
-          <time class="date" datetime={post.data.date.toISOString()}>
-            {formatDate(post.data.date)}
+          <time class="date" datetime={post.data.createdAt.toISOString()}>
+            {formatDate(post.data.createdAt)}
           </time>
         </li>
       ))

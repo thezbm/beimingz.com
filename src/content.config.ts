@@ -7,6 +7,8 @@ const page = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
   }),
 });
 
@@ -14,8 +16,9 @@ const writing = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/writing" }),
   schema: z.object({
     title: z.string(),
-    date: z.coerce.date(),
     description: z.string().optional(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
   }),
 });
 

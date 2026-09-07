@@ -1,7 +1,8 @@
 ---
 title: Building This Site
-date: 2026-08-18
 description: How this code-editor-style personal site is built.
+createdAt: 2026-08-22
+updatedAt: 2026-08-22
 ---
 
 # Building This Site

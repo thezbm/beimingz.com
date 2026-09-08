@@ -17,6 +17,8 @@ const posts = (await getCollection("writing")).sort(
   title={entry.data.title}
   path={route}
   description={entry.data.description}
+  createdAt={entry.data.createdAt}
+  updatedAt={entry.data.updatedAt}
 >
   <Content />
   <ul class="blog-list" role="list">

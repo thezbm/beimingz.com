@@ -1,17 +1,52 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getEntry, render } from "astro:content";
+import { getRecentSections } from "../lib/recent";
+import { formatDate } from "../lib/format";
 
 const entry = await getEntry("page", "readme");
 if (!entry) throw new Error("Missing 'readme' content entry");
 const { Content } = await render(entry);
 const route = "/";
+const { pages, writings } = await getRecentSections(2);
 ---
 
 <Layout
   title={entry.data.title}
   path={route}
   description={entry.data.description}
+  createdAt={entry.data.createdAt}
+  updatedAt={entry.data.updatedAt}
 >
   <Content />
+
+  <h2 class="recent-heading">Recently Updated</h2>
+
+  <p class="recent-subheading">Pages</p>
+  <ul class="recent-list" role="list">
+    {
+      pages.map((entry) => (
+        <li>
+          <a href={entry.href}>{entry.title}</a>
+          <time class="date" datetime={entry.updatedAt.toISOString()}>
+            {formatDate(entry.updatedAt)}
+          </time>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="recent-subheading">Writings</p>
+  <ul class="recent-list" role="list">
+    {
+      writings.map((entry) => (
+        <li>
+          <a href={entry.href}>{entry.title}</a>
+          <time class="date" datetime={entry.updatedAt.toISOString()}>
+            {formatDate(entry.updatedAt)}
+          </time>
+        </li>
+      ))
+    }
+  </ul>
 </Layout>

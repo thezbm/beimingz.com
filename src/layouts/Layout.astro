@@ -3,6 +3,7 @@ import "../styles/global.css";
 import "katex/dist/katex.min.css";
 import FileTree from "../components/FileTree.astro";
 import { fileTree, isIndexRoute } from "../lib/tree";
+import { formatDate } from "../lib/format";
 import { ClientRouter } from "astro:transitions";
 import { Menu } from "@lucide/astro";
 
@@ -10,9 +11,11 @@ export interface Props {
   title?: string;
   description?: string;
   path: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-const { title, description, path } = Astro.props;
+const { title, description, path, createdAt, updatedAt } = Astro.props;
 
 const siteTitle = "Beiming Zhang";
 const pageTitle = title ? `${title} — ${siteTitle}` : siteTitle;
@@ -102,6 +105,27 @@ if (path === "/") {
           {breadcrumb}
         </div>
         <article class="main-content">
+          {
+            createdAt != null && (
+              <div class="page-meta">
+                <span>
+                  Created{" "}
+                  <time datetime={createdAt.toISOString()}>
+                    {formatDate(createdAt)}
+                  </time>
+                </span>
+                {updatedAt != null &&
+                  updatedAt.valueOf() !== createdAt.valueOf() && (
+                    <span>
+                      · Updated{" "}
+                      <time datetime={updatedAt.toISOString()}>
+                        {formatDate(updatedAt)}
+                      </time>
+                    </span>
+                  )}
+              </div>
+            )
+          }
           <slot />
         </article>
       </main>

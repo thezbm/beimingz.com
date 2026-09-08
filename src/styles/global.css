@@ -213,6 +213,21 @@ a:hover {
   padding: 8px 0;
 }
 
+.believe-sign {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28px;
+  transform: rotate(-2deg);
+}
+
+.believe-sign img {
+  display: block;
+  width: 180px;
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 2px rgba(0, 0, 0, 0.2));
+}
+
 .tree-node {
   display: block;
 }

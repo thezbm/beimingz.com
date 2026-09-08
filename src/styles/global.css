@@ -142,10 +142,15 @@ a:hover {
   gap: 8px;
 }
 
-.sidebar-header strong {
+.sidebar-brand {
   color: var(--text);
   font-weight: 600;
   font-size: 16px;
+  text-decoration: none;
+}
+
+.sidebar-brand:hover {
+  text-decoration: none;
 }
 
 .menu-toggle {

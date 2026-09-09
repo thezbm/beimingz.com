@@ -219,18 +219,17 @@ a:hover {
 }
 
 .believe-sign {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 28px;
+  position: absolute;
+  top: 60px;
+  right: 20px;
   transform: rotate(-2deg);
 }
 
 .believe-sign img {
   display: block;
-  width: 180px;
-  max-width: 100%;
+  width: 160px;
   height: auto;
-  filter: drop-shadow(0 4px 2px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.2));
 }
 
 .tree-node {
@@ -324,6 +323,7 @@ details[open] > summary > .tree-caret::before {
 }
 
 .main {
+  position: relative;
   overflow-y: auto;
   overflow-x: clip;
   scrollbar-gutter: stable;
@@ -878,5 +878,11 @@ details[open] > summary > .tree-caret::before {
   .sidebar-open .sidebar-backdrop {
     opacity: 1;
     pointer-events: auto;
+  }
+}
+
+@media (max-width: 1440px) {
+  .believe-sign {
+    display: none;
   }
 }

@@ -2,10 +2,12 @@
 title: Data Structures and Algorithms
 description: Data structures and algorithms.
 createdAt: 2026-08-27
-updatedAt: 2026-09-07
+updatedAt: 2026-09-13
 ---
 
 # Data Structures and Algorithms
+
+This page contains notes on some data structures and algorithms.
 
 ## Binary Search
 
@@ -86,7 +88,7 @@ class Solution:
 
 Surprisingly, the exact same algorithm also works for our problem where there can be multiple peaks.
 
-We can assume every array has a peak: if there were no peaks, the second element has to be larger than the first, otherwise the first is the peak; the third has to be larger than the second for the same reason; thus, all elements have to be increasing (because of the constraint `nums[i] != nums[i + 1]` for all valid `i`); however, the last element will then be a peak. Thus, there always exists a peak in an given array. (Also, the problem description doesn't say anything about returning `-1`.)
+We can assume every array has a peak: if there were no peaks, the second element has to be larger than the first, otherwise the first is the peak; the third has to be larger than the second for the same reason; thus, all elements have to be increasing (because of the constraint `nums[i] != nums[i + 1]` for all valid `i`); however, the last element will then be a peak. Thus, there always exists a peak in a given array. (Also, the problem description doesn't say anything about returning `-1`.)
 
 The reason this works even with multiple peaks is that `check` might map the array to something like `[False, False, True, True, False, True, False, True]`, and what matters is that each result tells us which half must contain a peak: if `check(mid)` is `True`, then `nums[mid] > nums[mid + 1]`, so a peak exists somewhere in `[left, mid]`; otherwise, `nums[mid] < nums[mid + 1]`, so a peak exists in `[mid + 1, right]`. Thus, we can always discard one half while preserving the guarantee that a peak remains.
 
@@ -252,3 +254,88 @@ class Solution:
             rob, norob = num + norob, max(norob, rob)
         return max(rob, norob)
 ```
+
+## Linked List
+
+Definition for a singly-linked list on LeetCode:
+
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+```
+
+A linked list can be reversed in place by reversing each `next` pointer while iterating over it.
+
+#### [LeetCode: 206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/description/)
+
+```python {5-6}
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        pre, cur = None, head
+        while cur is not None:
+            nxt = cur.next
+            cur.next = pre
+            pre = cur
+            cur = nxt
+        return pre
+```
+
+In each iteration, we point the current node's `next` pointer to the previous node, and then update `pre` and `cur` to get ready for the next iteration. Note that we have to store the current node's next node in a temporary variable before we update the pointer, because after we point the current node's `next` pointer to the previous node, we lose track of the next node. Initially we set the current node to be the `head`, so its previous node is set to `None` — the tail of the reversed list is the original `head`, whose `next` is `None`. After the loop, `cur` is `None`, and `pre` is the last node we updated, so `pre` is the head of the reversed list.
+
+This implementation gives the optimal time and space complexities of $O(n)$ and $O(1)$.
+
+In my opinion, a more intuitive and elegant implementation is through recursion.
+
+```python
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if head is None or head.next is None:
+            return head
+        reversed_head = self.reverseList(head.next)
+        head.next.next = head
+        head.next = None
+        return reversed_head
+```
+
+To reverse a linked list, we remove its head, reverse the rest, and append the head to the reversed rest as its new tail. To append the head as the tail, notice that the head's `next` points to the tail of the reversed list, so we just set the tail's `next` to `head` and make `head` point to `None` to make it the new tail.
+
+This implementation runs in $O(n)$ time, but has $O(n)$ space complexity because of the recursive call stack.
+
+We can actually write the recursion in a different way:
+
+```python {3, 8}
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        def helper(acc, node):
+            if node is None:
+                return acc
+            nxt = node.next
+            node.next = acc
+            return helper(node, nxt)
+
+        return helper(None, head)
+```
+
+This is a common trick in functional programming that transforms a regular recursion into a _tail recursion_ by introducing an accumulator.
+
+A _tail recursion_ is a special kind of recursion where the recursive call is the function's last operation along that execution path.
+The general idea of converting to a tail recursion is to do the work "on the way down" instead of "on the way back up", by carrying state with an accumulator argument. Note that it's not always convertible.
+In this case it is. Each recursive call builds up the answer by appending the current node to `acc` as the head, so a reversed linked list is built on `acc` when reaching the end.
+
+The reason to convert to tail recursion is that it becomes possible to apply compiler optimizations that basically reuse the current stack frame for the recursive call instead of allocating a new one for each recursive call. We know for sure that once we start the recursive function call, the current function frame is useless, as we are not doing any more work after the recursive call returns.
+
+Therefore, we can argue the above implementation has $O(1)$ space complexity under TCO (tail call optimization). The caveat, however, is that CPython doesn't support TCO, so in Python, this is still technically $O(n)$ space.
+In some other programming languages like OCaml, the equivalent code is tail-call optimized.
+
+```ocaml
+let rev list =
+  let rec aux acc = function
+    | [] -> acc
+    | h :: t -> aux (h :: acc) t
+  in
+  aux [] list
+```
+
+Now, looking back at the iterative implementation, we can see it's essentially doing the same thing as our tail-recursive implementation, just expressed in a different way.

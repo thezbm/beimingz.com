@@ -2,7 +2,7 @@
 title: Problems in My Life
 description: "Perfectionism, procrastination, and poor task management: how I deal with them."
 createdAt: 2026-09-06
-updatedAt: 2026-09-07
+updatedAt: 2026-09-13
 ---
 
 # Problems in My Life
@@ -45,6 +45,7 @@ How? For my task management, I need clear **priorities**. Find the objectives at
 How do I keep myself accountable? Make plans and **time block** my calendar so I know what to do and don't get distracted by other stuff that's not on my priority list. How do I know if I'm on track? Again, time blocks! They are supposed to be flexible so I can move them around to reflect my everyday activities. At the end of the day or week, I check whether I got the right things done and made consistent progress.
 
 How do I make sure I actually start doing things when it's time to do them? Or, how do I stop procrastinating? A question a friend once asked me stuck with me: _Will I feel more prepared if I do it later?_ Probably not. So, really, the best time to start is right now. **Reframing the task** makes it easier to start. Try to break the task down into smaller pieces, and aim to finish just one at a time. This reduces the friction to get myself started by downplaying the effort I need to make. Once I'm able to start, the rest will get much easier.
+Here's an example. I have no problem jumping right into finding the root cause of a bug in an open source project on GitHub, or cooking up a quick POC of something. They make good first pieces of big tasks, because there's nothing at stake: I just need to find the bug, not fix it — and even if I fail to identify it, no big deal. The POC is just a POC, and the implementation can be as ugly as it needs to be. Once I've started, the rest just feels natural: I fix the bug and open a PR, or polish the POC/demo and add features to it.
 
 After I start, how do I make sure I stay focused during that one session? Use **friction**! Try to add friction to the things that would distract me. For example, I put my phone in my backpack and stash the backpack out of sight, sometimes even 30 feet away if I'm somewhere I know no one's gonna steal it, like the office. This way, there's nothing at hand but my laptop with work on it. The friction of grabbing my phone back and starting to doom scroll is just too much to even bother with.
 

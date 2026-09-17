@@ -2,7 +2,7 @@
 title: Data Structures and Algorithms
 description: Data structures and algorithms.
 createdAt: 2026-08-27
-updatedAt: 2026-09-13
+updatedAt: 2026-09-16
 ---
 
 # Data Structures and Algorithms
@@ -268,6 +268,8 @@ class ListNode:
         self.next = next
 ```
 
+---
+
 A linked list can be reversed in place by reversing each `next` pointer while iterating over it.
 
 [LeetCode: 206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/description/)
@@ -341,3 +343,32 @@ let rev list =
 ```
 
 Now, looking back at the iterative implementation, we can see it's essentially doing the same thing as our tail-recursive implementation, just expressed in a different way.
+
+---
+
+Sometimes a _dummy node_ makes life easier. It's a placeholder node placed before the head, so an operation that may modify the head (e.g. deletion, insertion, merging) needs no special care: every node, including the head, is reached through some node's `next` pointer, and the head of the resulting list is simply `dummy.next`.
+
+### Examples
+
+#### [LeetCode: 21. Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/description/)
+
+```python {3, 14}
+class Solution:
+    def mergeTwoLists(
+        self, list1: Optional[ListNode], list2: Optional[ListNode]
+    ) -> Optional[ListNode]:
+        dummy = ListNode()
+        cur = dummy
+        while list1 and list2:
+            if list1.val < list2.val:
+                cur.next = list1
+                list1 = list1.next
+            else:
+                cur.next = list2
+                list2 = list2.next
+            cur = cur.next
+        cur.next = list1 if list1 else list2
+        return dummy.next
+```
+
+Without a dummy node, we would have to pick which of the two heads starts the merged list before doing anything.

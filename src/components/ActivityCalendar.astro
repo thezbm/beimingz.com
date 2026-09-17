@@ -53,16 +53,16 @@ for (let w = 0; w < numWeeks; w++) {
 }
 
 const monthLabels: { index: number; label: string }[] = [];
-let lastMonth = -1;
 weeks.forEach((week, index) => {
-  const mid = week[4].date;
-  if (mid.getMonth() !== lastMonth) {
-    lastMonth = mid.getMonth();
-    monthLabels.push({
-      index,
-      label: mid.toLocaleString("en-US", { month: "short" }),
-    });
-  }
+  const first = week.find((cell) => cell.date.getDate() === 1);
+  if (!first) return;
+  const prev = monthLabels[monthLabels.length - 1];
+  if (prev && index - prev.index < 3) return;
+  if (numWeeks - index < 2) return;
+  monthLabels.push({
+    index,
+    label: first.date.toLocaleString("en-US", { month: "short" }),
+  });
 });
 
 const totalDays = dateSet.size;

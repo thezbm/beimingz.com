@@ -10,7 +10,7 @@ I'm a CS master's student at Rice University, where I study computer systems. Be
 What I'm up to:
 
 - Writing code
-- [Doing LeetCode](/cs/dsa), which I really don't like; solving all the LeetCode hard problems doesn't make one a good programmer
+- [Doing LeetCode](/cs/leetcode), which I really don't like; solving all the LeetCode hard problems doesn't make one a good programmer
 - [Climbing rocks](/hobbies/climbing)
 
 Thanks for stopping by. My friends inspired me to build my website and start writing. Go check out theirs:

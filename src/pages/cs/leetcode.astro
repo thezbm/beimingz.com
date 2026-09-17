@@ -1,0 +1,19 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getEntry, render } from "astro:content";
+
+const entry = await getEntry("page", "leetcode");
+if (!entry) throw new Error("Missing 'leetcode' content entry");
+const { Content } = await render(entry);
+const route = "/cs/leetcode";
+---
+
+<Layout
+  title={entry.data.title}
+  path={route}
+  description={entry.data.description}
+  createdAt={entry.data.createdAt}
+  updatedAt={entry.data.updatedAt}
+>
+  <Content />
+</Layout>

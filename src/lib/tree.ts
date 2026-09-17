@@ -29,6 +29,11 @@ export const fileTree: TreeNode[] = [
         route: "/cs/dsa",
       },
       {
+        name: "leetcode",
+        type: "file",
+        route: "/cs/leetcode",
+      },
+      {
         name: "networks",
         type: "file",
         route: "/cs/networks",

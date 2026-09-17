@@ -7,7 +7,9 @@ updatedAt: 2026-09-13
 
 # Data Structures and Algorithms
 
-This page contains notes on some data structures and algorithms.
+This page contains notes on some data structures and algorithms, with some example problems.
+
+See [this page](/cs/leetcode) for more LeetCode problems.
 
 ## Binary Search
 
@@ -268,7 +270,7 @@ class ListNode:
 
 A linked list can be reversed in place by reversing each `next` pointer while iterating over it.
 
-#### [LeetCode: 206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/description/)
+[LeetCode: 206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/description/)
 
 ```python {5-6}
 class Solution:

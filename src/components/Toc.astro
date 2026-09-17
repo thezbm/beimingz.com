@@ -1,0 +1,33 @@
+---
+import type { MarkdownHeading } from "astro";
+
+export interface Props {
+  headings: MarkdownHeading[];
+}
+
+interface TocItem {
+  slug: string;
+  text: string;
+  depth: number;
+}
+
+const { headings } = Astro.props;
+const entries: TocItem[] = headings
+  .filter((h) => h.depth >= 2 && h.depth <= 3)
+  .map(({ depth, slug, text }) => ({ depth, slug, text }));
+---
+
+{
+  entries.length > 0 && (
+    <nav class="toc" aria-label="On this page">
+      <span class="toc-label">On this page</span>
+      <ul role="list">
+        {entries.map((item) => (
+          <li class={item.depth === 3 ? "toc-l3" : undefined}>
+            <a href={`#${item.slug}`}>{item.text}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

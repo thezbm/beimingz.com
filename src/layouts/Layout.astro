@@ -2,6 +2,8 @@
 import "../styles/global.css";
 import "katex/dist/katex.min.css";
 import FileTree from "../components/FileTree.astro";
+import Toc from "../components/Toc.astro";
+import type { MarkdownHeading } from "astro";
 import { fileTree, isIndexRoute } from "../lib/tree";
 import { formatDate } from "../lib/format";
 import { ClientRouter } from "astro:transitions";
@@ -13,9 +15,15 @@ export interface Props {
   path: string;
   createdAt?: Date;
   updatedAt?: Date;
+  headings?: MarkdownHeading[];
+  /** Opt into the table of contents (entry frontmatter `toc: true`). */
+  toc?: boolean;
 }
 
-const { title, description, path, createdAt, updatedAt } = Astro.props;
+const { title, description, path, createdAt, updatedAt, headings, toc } =
+  Astro.props;
+
+const showToc = toc === true && (headings?.length ?? 0) > 0;
 
 const siteTitle = "Beiming Zhang";
 const pageTitle = title ? `${title} — ${siteTitle}` : siteTitle;
@@ -126,8 +134,22 @@ if (path === "/") {
               </div>
             )
           }
+          {
+            showToc && (
+              <div class="toc-inline">
+                <Toc headings={headings ?? []} />
+              </div>
+            )
+          }
           <slot />
         </article>
+        {
+          showToc && (
+            <div class="toc-rail">
+              <Toc headings={headings ?? []} />
+            </div>
+          )
+        }
       </main>
     </div>
   </body>
@@ -176,4 +198,32 @@ if (path === "/") {
   document.addEventListener("astro:page-load", () => {
     setOpen(false);
   });
+
+  // Highlight the current section entry in the side rail. Astro module
+  // scripts run once, so pages are re-wired on astro:page-load.
+  function wireTocRail() {
+    const rail = document.querySelector(".toc-rail");
+    const main = document.querySelector(".main");
+    if (!rail || !main) return;
+    const links = Array.from(rail.querySelectorAll("a")) as HTMLAnchorElement[];
+    const targets = links.map((l) =>
+      document.getElementById((l.getAttribute("href") ?? "").slice(1)),
+    );
+    const items = links.map((l) => l.parentElement as Element);
+
+    const onScroll = () => {
+      // Highlight the entry of the last heading above the header line.
+      let idx = -1;
+      for (let i = 0; i < targets.length; i++) {
+        const t = targets[i];
+        if (t && t.getBoundingClientRect().top <= 64) idx = i;
+      }
+      items.forEach((it, j) => it.classList.toggle("current", j === idx));
+    };
+    main.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  document.addEventListener("astro:page-load", wireTocRail);
+  wireTocRail();
 </script>

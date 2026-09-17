@@ -9,6 +9,7 @@ const page = defineCollection({
     description: z.string().optional(),
     createdAt: z.coerce.date().optional(),
     updatedAt: z.coerce.date().optional(),
+    toc: z.boolean().optional(),
   }),
 });
 
@@ -19,6 +20,7 @@ const writing = defineCollection({
     description: z.string().optional(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    toc: z.boolean().optional(),
   }),
 });
 

@@ -45,7 +45,7 @@
   --surface-hover: #eaeef2;
   --border: #d1d9e0;
   --text: #1f2328;
-  --text-muted: #656d76;
+  --text-muted: #616a73;
   --accent: #0969da;
   --accent-soft: #ddf4ff;
   --code-bg: #f0f3f6;
@@ -64,7 +64,7 @@
     --surface-hover: #1f242c;
     --border: #30363d;
     --text: #c9d1d9;
-    --text-muted: #8b949e;
+    --text-muted: #8e97a0;
     --accent: #58a6ff;
     --accent-soft: #1f6feb;
     --code-bg: #21262d;
@@ -620,6 +620,119 @@ details[open] > summary > .tree-caret::before {
 
 .page-meta time {
   color: var(--text-muted);
+}
+
+.toc {
+  margin: 1.5rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.toc-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc li {
+  padding: 3px 0;
+  min-width: 0;
+}
+
+.toc li.toc-l3 {
+  padding-left: 1.1rem;
+}
+
+.toc a {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text);
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+.toc a:hover {
+  color: var(--accent);
+}
+
+.toc-rail {
+  display: none;
+}
+
+/* Side rail in the free gutter right of the article. */
+@media (min-width: 1390px) {
+  .toc-inline {
+    display: none;
+  }
+
+  .toc-rail {
+    display: block;
+    position: fixed;
+    top: 48px;
+    right: 16px;
+    width: min(170px, calc((100vw - 1068px) / 2));
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+  }
+
+  .toc-rail .toc {
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+  }
+
+  .toc-rail .toc a {
+    font-size: 0.74rem;
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  .toc-rail .toc a:hover {
+    color: var(--accent);
+  }
+
+  .toc-rail .toc-label {
+    margin-bottom: 0.25rem;
+  }
+
+  .toc-rail .toc li {
+    padding: 1px 0;
+  }
+
+  .toc-rail .toc li.toc-l3 {
+    padding-left: 0.8rem;
+  }
+
+  .toc-rail .toc li.current a {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--border);
+    text-underline-offset: 2px;
+  }
+
+  .toc-rail .toc li.current a:hover {
+    color: var(--accent);
+  }
+}
+
+.main-content h1,
+.main-content h2,
+.main-content h3,
+.main-content h4,
+.main-content h5,
+.main-content h6 {
+  scroll-margin-top: 60px;
 }
 
 .recent-heading {

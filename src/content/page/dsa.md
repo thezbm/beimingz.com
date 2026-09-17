@@ -3,6 +3,7 @@ title: Data Structures and Algorithms
 description: Data structures and algorithms.
 createdAt: 2026-08-27
 updatedAt: 2026-09-16
+toc: true
 ---
 
 # Data Structures and Algorithms

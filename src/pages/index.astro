@@ -6,7 +6,7 @@ import { formatDate } from "../lib/format";
 
 const entry = await getEntry("page", "readme");
 if (!entry) throw new Error("Missing 'readme' content entry");
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 const route = "/";
 const { pages, writings } = await getRecentSections(2);
 ---
@@ -16,6 +16,8 @@ const { pages, writings } = await getRecentSections(2);
   path={route}
   description={entry.data.description}
   createdAt={entry.data.createdAt}
+  headings={headings}
+  toc={entry.data.toc}
   updatedAt={entry.data.updatedAt}
 >
   <div class="believe-sign">

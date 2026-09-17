@@ -4,7 +4,7 @@ import { getEntry, render } from "astro:content";
 
 const entry = await getEntry("page", "leetcode");
 if (!entry) throw new Error("Missing 'leetcode' content entry");
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 const route = "/cs/leetcode";
 ---
 
@@ -13,6 +13,8 @@ const route = "/cs/leetcode";
   path={route}
   description={entry.data.description}
   createdAt={entry.data.createdAt}
+  headings={headings}
+  toc={entry.data.toc}
   updatedAt={entry.data.updatedAt}
 >
   <Content />

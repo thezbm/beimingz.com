@@ -361,10 +361,10 @@ export const shows: Show[] = [
   },
   {
     title: "The Office",
-    status: "S9E17",
+    status: "Finished",
     tier: 5,
     review:
-      "One of my favorite TV shows. It gets better as you grow familiar with each character. I enjoyed watching an episode every day during lunch and relished the funny, cozy moments of office life. Angela Kinsey (Angela Martin) and Jenna Fischer (Pam Beesly) host a lovely re-watch podcast called Office Ladies, where they break down episodes and tell behind-the-scenes stories.",
+      "One of my favorite TV shows. By the end, I knew everyone in the show so well they felt like family, and I laughed and even cried with them. Angela Kinsey (Angela Martin) and Jenna Fischer (Pam Beesly) host a lovely re-watch podcast called Office Ladies, where they break down episodes and tell behind-the-scenes stories.",
   },
   {
     title: "Fallout",

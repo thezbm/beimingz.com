@@ -111,14 +111,14 @@ export const shows: Show[] = [
   },
   {
     title: "Slow Horses",
-    status: "S4",
+    status: "S6E1",
     tier: 4,
     review:
       "I like that this crime thriller is told from the perspective of a bunch of \"loser\" agents who don't have the best resources. Jackson Lamb is a well-written character, really brought to life by Gary Oldman. The plot doesn't feel cliched at all.",
   },
   {
     title: "Stranger Things",
-    status: "S4",
+    status: "Finished",
     tier: 4,
     review:
       "A little overhyped, but it's a really good sci-fi thriller told through the eyes of a bunch of kids. I really like the music in this show.",
@@ -261,7 +261,7 @@ export const shows: Show[] = [
   },
   {
     title: "Reacher",
-    status: "S3",
+    status: "S4",
     tier: 3,
     review: "A pretty good one-man-solves-all-problems action thriller.",
   },

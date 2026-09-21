@@ -2,7 +2,7 @@
 title: Data Structures and Algorithms
 description: Data structures and algorithms.
 createdAt: 2026-08-27
-updatedAt: 2026-09-16
+updatedAt: 2026-09-20
 toc: true
 ---
 
@@ -269,7 +269,7 @@ class ListNode:
         self.next = next
 ```
 
----
+### Reversing
 
 A linked list can be reversed in place by reversing each `next` pointer while iterating over it.
 
@@ -345,7 +345,68 @@ let rev list =
 
 Now, looking back at the iterative implementation, we can see it's essentially doing the same thing as our tail-recursive implementation, just expressed in a different way.
 
----
+As a side note, the iterative implementation has a more concise version:
+
+```python {5}
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        prev, curr = None, head
+        while curr is not None:
+            curr.next, prev, curr = prev, curr, curr.next
+        return prev
+```
+
+Note that multiple assignment (or tuple unpacking) in Python works by first evaluating RHS into a tuple (snapshot of old values), then unpacking and assigning LHS from left to right. So on the LHS, `curr` must appear after `curr.next`.
+
+### Fast & Slow Pointers
+
+The fast and slow pointer pattern can be used to **find the middle node** of a linked list, or to **detect if a linked list contains a loop**.
+
+[LeetCode: 876. Middle of the Linked List](https://leetcode.com/problems/middle-of-the-linked-list/description/)
+
+```python
+class Solution:
+    def middleNode(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        slow, fast = head, head
+        while fast and fast.next:
+            slow, fast = slow.next, fast.next.next
+        return slow
+```
+
+The fast pointer moves two steps at a time, and the slow pointer one at a time. When the fast pointer reaches the end of a list, the slow pointer rests exactly at the halfway point. Here's a variant:
+
+```python del={2} ins={3}
+def middleNode(self, head: ListNode) -> ListNode:
+    slow, fast = head, head
+    slow, fast = head, head.next
+    while fast and fast.next:
+        slow, fast = slow.next, fast.next.next
+    return slow
+```
+
+They return different middle nodes when there are even number of nodes in the linked list.
+
+| initialization     | odd \# of nodes (e.g. `1->2->3`) | even \# of nodes (e.g. `1->2->3->4`) |
+| ------------------ | -------------------------------- | ------------------------------------ |
+| `fast = head`      | slow = middle (`2`)              | slow = **second** middle (`3`)       |
+| `fast = head.next` | slow = middle (`2`)              | slow = **first** middle (`2`)        |
+
+[141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/description/)
+
+```python
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        slow, fast = head, head
+        while fast and fast.next:
+            slow, fast = slow.next, fast.next.next
+            if fast == slow:
+                return True
+        return False
+```
+
+If there's no cycle, the fast pointer will hit the end. If there's a cycle, the fast pointer will lap the slow one: inside the cycle the gap shrinks by exactly 1 per iteration, so the pointers will meet rather than jumping over.
+
+### Dummy Node
 
 Sometimes a _dummy node_ makes life easier. It's a placeholder node placed before the head, so an operation that may modify the head (e.g. deletion, insertion, merging) needs no special care: every node, including the head, is reached through some node's `next` pointer, and the head of the resulting list is simply `dummy.next`.
 
@@ -373,3 +434,26 @@ class Solution:
 ```
 
 Without a dummy node, we would have to pick which of the two heads starts the merged list before doing anything.
+
+#### [LeetCode: 234. Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/description/)
+
+We can solve this problem in three steps: find the middle node (breaking the linked list into two halves), reverse the second half, and compare the two halves.
+
+```python
+class Solution:
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        slow, fast = head, head
+        while fast and fast.next:
+            slow, fast = slow.next, fast.next.next
+
+        prev, curr = None, slow
+        while curr:
+            curr.next, prev, curr = prev, curr, curr.next
+
+        fst, snd = head, prev
+        while snd:
+            if fst.val != snd.val:
+                return False
+            fst, snd = fst.next, snd.next
+        return True
+```

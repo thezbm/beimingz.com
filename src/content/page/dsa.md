@@ -2,7 +2,7 @@
 title: Data Structures and Algorithms
 description: Data structures and algorithms.
 createdAt: 2026-08-27
-updatedAt: 2026-09-20
+updatedAt: 2026-09-29
 toc: true
 ---
 
@@ -137,6 +137,145 @@ class Solution:
 ```
 
 The `check` function for this problem basically uses the last element as a reference point to determine which sorted half `target` belongs to.
+
+## Sliding Window
+
+The sliding window technique is where we maintain a window `[left, right]` that expands and shrinks as we scan the array. It fits problems where we need to track everything between the two pointers (a contiguous block of data between `left` and `right`), whereas in other two-pointer problems we usually only care about the elements at the two pointers.
+
+Note that **the sliding window only works when a window's validity is monotonic**. Expanding the window changes the window state in one predictable direction, and shrinking it does the opposite.
+
+A general template (_variable-size window_):
+
+```python {8, 10-11, 15-16}
+def variable_sliding_window(arr):
+    window_state = init_window_state()
+    ans = init_answer()
+
+    left = 0
+    # expand the window
+    for right in range(len(arr)):
+        window_state.add(arr[right])
+
+        # shrink the window if the window is not valid
+        while not window_state.is_valid():
+            window_state.remove(arr[left])
+            left += 1
+
+        # update the answer once the window is valid
+        ans.update(window_state)
+
+    return ans
+```
+
+Some notes on the template:
+
+- `window_state` holds whatever the problem asks us to track for the current window (e.g. a sum, a counter, a set, ...)
+- the window shrink condition depends on the problem:
+  - for a _maximum window_ we shrink while the window is invalid
+  - for a _minimum window_ we shrink while it's still valid (in which case the update statement needs to be inside the while loop before shrinking, so every valid window is recorded)
+- sometimes it's easier to check and shrink first, then add the new element `arr[right]` to window state
+
+_Fixed-size window_ is essentially a special case of _variable-size window_, where the window shrinks everytime as it expands. The template (`k` is the fixed window size):
+
+```python
+def fix_sliding_window(arr, k):
+    window_state = init_window_state(arr[:k])
+    ans = init_answer(arr[:k])
+
+    left = 0
+    for right in range(k, len(arr)):
+        window_state.add(arr[right])
+        window_state.remove(arr[left])
+        left += 1
+
+        ans.update(window_state)
+
+    return ans
+```
+
+### Examples
+
+#### [LeetCode: 3. Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/)
+
+We need a variable-size window. Expand until a duplicate appears, then shrink from the left until the window is valid again. In this problem, we can track the window state with a hash set.
+
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        seen = set()
+        ans = 0
+
+        left = 0
+        for right in range(len(s)):
+            while s[right] in seen:
+                seen.remove(s[left])
+                left += 1
+            seen.add(s[right])
+
+            ans = max(ans, right - left + 1)
+
+        return ans
+```
+
+`seen` tracks the characters currently in the window. When a new character is already inside, we shrink from the left until the duplicate is gone. Then, we include the new character into the window, at which point the window `[left, right]` is valid. So, we update `ans` with the current window length.
+
+As a side note, expanding the window in this problem can only add new repeating characters, and shrinking can only potentially get rid of repeating characters, which satisfy the monotonicity requirement.
+
+#### [LeetCode: 76. Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/)
+
+We need a variable-size window. The window is valid if it contains every character in `t`. In this problem, we need to shrink when the condition is met, because we are finding the minimum window. We can use a counter to track what characters and how many of them we need to meet the condition.
+
+```python
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        missing = Counter(t)  # chars still needed, and how many
+        required = len(missing)  # number of distinct chars in t
+        covered = 0  # number of distinct chars fully covered so far
+        best_l, best_r = 0, len(s)  # initialized with sentinel window
+
+        l = 0
+        for r in range(len(s)):
+            if s[r] in missing:
+                missing[s[r]] -= 1
+                if missing[s[r]] == 0:
+                    covered += 1
+            while covered == required:
+                if r - l + 1 < best_r - best_l + 1:
+                    best_l, best_r = l, r
+                if s[l] in missing:
+                    missing[s[l]] += 1
+                    if missing[s[l]] > 0:
+                        covered -= 1
+                l += 1
+
+        return "" if best_r == len(s) else s[best_l : best_r + 1]
+```
+
+- `missing[s[r]]`: how many more copies of `s[r]` the window still needs
+- `required` is the number of distinct characters in `t`; `covered` is how many of those characters the current window fully supplies, i.e. has at least the required count of
+- `covered` goes up when expanding drops `missing[s[r]]` to `0`, and down when shrinking pushes `missing[s[l]]` above `0`
+- a window is valid $\iff$ `covered == required`
+
+#### [LeetCode: 643. Maximum Average Subarray I](https://leetcode.com/problems/maximum-average-subarray-i/description/)
+
+We need a fixed-size window. The window state is simply the sum of the `k` elements.
+
+```python
+class Solution:
+    def findMaxAverage(self, nums: list[int], k: int) -> float:
+        windowSum = sum(nums[:k])
+        maxSum = windowSum
+
+        left = 0
+        for right in range(k, len(nums)):
+            windowSum += nums[right]
+            windowSum -= nums[left]
+            left += 1
+
+            maxSum = max(maxSum, windowSum)
+
+        return maxSum / k
+```
 
 ## Dynamic Programming
 

@@ -111,7 +111,7 @@ export const shows: Show[] = [
   },
   {
     title: "Slow Horses",
-    status: "S6E1",
+    status: "S6E4",
     tier: 4,
     review:
       "I like that this crime thriller is told from the perspective of a bunch of \"loser\" agents who don't have the best resources. Jackson Lamb is a well-written character, really brought to life by Gary Oldman. The plot doesn't feel cliched at all.",
@@ -436,6 +436,11 @@ export const shows: Show[] = [
   {
     title: "Arrested Development",
     status: "S1?",
+    tier: 3,
+  },
+  {
+    title: "Lanterns",
+    status: "S1E6",
     tier: 3,
   },
 ];

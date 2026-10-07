@@ -525,6 +525,14 @@ details[open] > summary > .tree-caret::before {
   display: block;
 }
 
+.content-image {
+  display: block;
+  margin: 1.25rem auto;
+  max-width: 480px;
+  width: 100%;
+  height: auto;
+}
+
 .poster-caption {
   display: flex;
   flex-direction: column;

@@ -1,7 +1,7 @@
 ---
 import type { TreeNode } from "../lib/tree";
 import { isNodeActive, isRouteActive } from "../lib/tree";
-import { Folder, FileText, Files as FileStack } from "@lucide/astro";
+import { FileText, Files as FileStack, ChevronRight } from "@lucide/astro";
 
 export interface Props {
   nodes: TreeNode[];
@@ -17,12 +17,7 @@ const { nodes, currentRoute, depth = 0 } = Astro.props;
     const active = isNodeActive(node, currentRoute);
     const hasChildren = node.children && node.children.length > 0;
     const open = isRouteActive(node, currentRoute);
-    const IconComponent =
-      node.type === "folder"
-        ? Folder
-        : node.type === "index"
-          ? FileStack
-          : FileText;
+    const IconComponent = node.type === "index" ? FileStack : FileText;
 
     return hasChildren ? (
       <details class="tree-node" data-route={node.route} {open}>
@@ -33,8 +28,7 @@ const { nodes, currentRoute, depth = 0 } = Astro.props;
           data-type={node.type}
           aria-current={active ? "page" : undefined}
         >
-          <span class="tree-caret" />
-          <IconComponent size={14} class="tree-icon" />
+          <ChevronRight size={12} class="tree-caret" />
           <span>{node.name}</span>
         </summary>
         <div class="tree-children">

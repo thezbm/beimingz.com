@@ -295,12 +295,8 @@ a:hover {
 }
 
 .tree-caret {
-  width: 12px;
-  height: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
+  color: var(--text-muted);
   transition: transform 0.15s ease;
 }
 
@@ -312,14 +308,8 @@ a:hover {
   }
 }
 
-.tree-caret::before {
-  content: "▸";
-  font-size: 10px;
-  color: var(--text-muted);
-}
-
-details[open] > summary > .tree-caret::before {
-  content: "▾";
+details[open] > summary > .tree-caret {
+  transform: rotate(90deg);
 }
 
 .main {

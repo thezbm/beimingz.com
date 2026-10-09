@@ -440,7 +440,7 @@ export const shows: Show[] = [
   },
   {
     title: "Lanterns",
-    status: "S1E6",
+    status: "S1",
     tier: 3,
   },
 ];

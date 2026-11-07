@@ -10,15 +10,16 @@ const { days, label = "active days" } = Astro.props;
 
 const MS_DAY = 86_400_000;
 
+// Use UTC midnights so 24h steps can't drift across DST.
 function parseDay(dateStr: string): Date {
   const [y, m, d] = dateStr.split("-").map(Number);
-  return new Date(y, m - 1, d);
+  return new Date(Date.UTC(y, m - 1, d));
 }
 
 function toKey(date: Date): string {
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${date.getFullYear()}-${m}-${d}`;
+  const m = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(date.getUTCDate()).padStart(2, "0");
+  return `${date.getUTCFullYear()}-${m}-${d}`;
 }
 
 interface Cell {
@@ -32,11 +33,11 @@ const sortedKeys = [...dateSet].sort();
 const first = parseDay(sortedKeys[0]);
 const last = parseDay(sortedKeys[sortedKeys.length - 1]);
 
-const start = new Date(first);
-start.setDate(start.getDate() - start.getDay());
+const start = new Date(first.valueOf());
+start.setUTCDate(start.getUTCDate() - start.getUTCDay());
 
-const end = new Date(last);
-end.setDate(end.getDate() + (6 - end.getDay()));
+const end = new Date(last.valueOf());
+end.setUTCDate(end.getUTCDate() + (6 - end.getUTCDay()));
 
 const numWeeks = Math.round(
   ((end.valueOf() - start.valueOf()) / MS_DAY + 1) / 7,
@@ -54,14 +55,17 @@ for (let w = 0; w < numWeeks; w++) {
 
 const monthLabels: { index: number; label: string }[] = [];
 weeks.forEach((week, index) => {
-  const first = week.find((cell) => cell.date.getDate() === 1);
+  const first = week.find((cell) => cell.date.getUTCDate() === 1);
   if (!first) return;
   const prev = monthLabels[monthLabels.length - 1];
   if (prev && index - prev.index < 3) return;
   if (numWeeks - index < 2) return;
   monthLabels.push({
     index,
-    label: first.date.toLocaleString("en-US", { month: "short" }),
+    label: first.date.toLocaleString("en-US", {
+      timeZone: "UTC",
+      month: "short",
+    }),
   });
 });
 
